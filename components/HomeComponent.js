@@ -16,7 +16,7 @@ function RenderItem({ item }) {
 				<Text style={{ margin: 10 }}>{item.description}</Text>
 			</Card>
 		);
-	} // outside of if block return empty view in case we didn't enter the if block.
+	}            // outside of if block return empty view in case we didn't enter the if block.
 	return <View />;
 }
 
