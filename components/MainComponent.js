@@ -10,6 +10,15 @@ import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
+
+const mapDispatchToProps = {  //These action creators have been thunked in order to send asynchronous calls using fetch to the server to bring back data from server. 
+	fetchCampsites,                //using this mapDispatchToProps object allows us to access these action creators as props, just as map state to props object allowed us to access state data as props.
+	fetchComments,                 //to call these action creators do that in the main component below.
+	fetchPromotions,
+	fetchPartners
+};
 
 const DirectoryNavigator = createStackNavigator(
 	{
@@ -190,23 +199,28 @@ const MainNavigator = createDrawerNavigator(
 		}	
 	},
 	{
-		drawerBackgroundColor: '#CEC8FF', //optional second argument for additional configuration, set drawer bg color.
+		drawerBackgroundColor: '#CEC8FF',         //optional second argument for additional configuration, set drawer bg color.
 		contentComponent: CustomDrawerContentComponent
 	}
 );
-
-const AppNavigator = createAppContainer(MainNavigator);
-
+          
 class Main extends Component {
+
+	componentDidMount() {
+		this.props.fetchCampsites();
+		this.props.fetchComments();
+		this.props.fetchPromotions();
+		this.props.fetchPartners();
+	}
+
 	render() {
+
+		const AppNavigator = createAppContainer(MainNavigator);
 		return (
-			<View
-				style={{
+			<View style={{
 					flex: 1,
-					paddingTop:
-						Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight,
-				}}
-			>
+					paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
+				}}>
 				<AppNavigator />
 			</View>
 		);
@@ -241,4 +255,4 @@ const styles= StyleSheet.create ({
 	}
 });
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);  //How to get access to action creators as props inside main component
