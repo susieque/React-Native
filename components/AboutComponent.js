@@ -3,6 +3,7 @@ import { ScrollView, FlatList, Text } from 'react-native';
 import { ListItem, Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import Loading from './LoadingComponent'; //Doesn't need curly braces because it's the default export.
 
 const mapStateToProps = state => {
     return {
@@ -12,7 +13,7 @@ const mapStateToProps = state => {
 
 function Mission() {
     return (
-        <Card title="Our Mission"> 
+        <Card title='Our Mission'> 
             <Text>
                 We present a curated database of the best campsites in the vast woods and backcountry of the World Wide Web Wilderness. We increase access to adventure for the public while promoting safe and respectful use of resources. The expert wilderness trekkers on our staff personally verify each campsite to make sure that they are up to our standards. We also present a platform for campers to share reviews on campsites they have visited with each other.
             </Text>
@@ -37,14 +38,35 @@ class About extends Component {
         );
     };
 
+        if (this.props.partners.isLoading) {
+            return(
+                <ScrollView>
+                    <Mission />
+                    <Card 
+                        title='Community Partners'>
+                        <Loading />
+                    </Card>
+                </ScrollView>                
+            );
+        }
+        if (this.props.partners.errMess) {
+            return (
+                <ScrollView>
+                    <Mission />
+                    <Card title='Community Partners'>
+                        <Text>{this.props.partners.errMess}</Text>
+                    </Card>
+                </ScrollView>
+            );
+        }
         return (
             <ScrollView>
                 <Mission />
-                <Card title="Community Partners">
+                <Card title='Community Partners'>
                     <FlatList
                     data={this.props.partners.partners}    //the first partners here referes to entire part of state that handles partners , includind is loading and error message properties and partners array. Second partners refers to partners data array. 
                     renderItem={renderPartner}
-                    keyExtrator={item => item.id.toString()}  //connect this component to redux store in export line below.
+                    keyExtractor={item => item.id.toString()}  //connect this component to redux store in export line below.
                     />   
                 </Card>
             </ScrollView>
@@ -52,7 +74,5 @@ class About extends Component {
     }
 
 }
-
-
 
 export default connect (mapStateToProps)(About);  //About component now receives partners props from redux store. 
