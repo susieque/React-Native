@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, ScrollView, StyleSheet,
-    Picker, Switch, Button } from 'react-native';
+    Picker, Switch, Button, Modal } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 class Reservation extends Component {
@@ -12,7 +12,8 @@ class Reservation extends Component {
             campers: 1,
             hikeIn: false,
             date: new Date(),
-            showCalendar: false
+            showCalendar: false,
+            showModal: false   //set to false modal will be hidden, set to true will be shown
         };
     }
 
@@ -20,13 +21,22 @@ class Reservation extends Component {
         title: 'Reserve Campsite'
     }
 
+    toggleModal () {
+        this.setState({showModal: !this.state.showModal});
+    }
+
     handleReservation() {
-        console.log(JSON.stringify(this.state));  //just echo back component state to ourselves in a console log. Then reset state back to its initial values.
+        console.log(JSON.stringify(this.state));  //just echo back component state to ourselves in a console log.
+        this.toggleModal();
+    }    
+        
+    resetForm() {
         this.setState({
             campers: 1,
             hikeIn: false,
             date: new Date(),
-            showCalendar: false     
+            showCalendar: false,
+            showModal: false    
         });
     }
 
@@ -87,6 +97,34 @@ class Reservation extends Component {
                         accessibilityLabel='Tap me to search for available campsites to reserve'
                     />
                 </View>
+                <Modal 
+                    animationType={'slide'} //can be set to slide or fade animation or none.
+                    transparent={false} //false makes it opaque, true is transparent.
+                    visible={this.state.showModal} //if showModal is false then visible will be set to false. If true its set to true.
+                    onRequestClose={() => this.toggleModal()} //triggered if user uses hardware back button on mobile. Will close the modal with the callback.
+                >
+                    <View style={styles.modal}>
+                        <Text style={styles.modalTitle}>Search Campsite Reservations</Text>
+                        <Text style={styles.modalText}>
+                            Number of Campers: {this.state.campers}
+                        </Text>
+                        <Text style={styles.modalText}>
+                            Hike-in?: {this.state.hikeIn ? 'Yes' : 'No'}
+                        </Text>
+                        <Text style={styles.modalText}>
+                            Date: {this.state.date.toLocaleDateString('en-US')}
+                        </Text>
+                        <Button
+                            onPress={() => {
+                                this.toggleModal();
+                                this.resetForm();
+                            }}
+                            color='#5637DD'
+                            title='Close'
+                        />
+                    </View>
+
+                </Modal>
             </ScrollView>
         );
     }
@@ -106,6 +144,22 @@ const styles = StyleSheet.create({
     },
     formItem: {
         flex: 1
+    },
+    modal: {
+        justifyContent: 'center',
+        margin: 20
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        backgroundColor: '#5637DD',
+        textAlign: 'center',
+        color: '#fff',
+        marginBottom: 20
+    },
+    modalText: {
+        fontSize: 18,
+        margin: 10
     }
 });
 

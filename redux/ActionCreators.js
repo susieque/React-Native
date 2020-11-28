@@ -1,8 +1,7 @@
 import * as ActionTypes from './ActionTypes';
-import { baseUrl } from '../shared/baseUrl'; //using ip address from baseUrl file.
+import { baseUrl } from '../shared/baseUrl';
 
 export const fetchComments = () => (dispatch) => {
-	//wrapping action creator in additional function. Redux Thunk library will intercept it, stop dispatch from going to a reducer. Sends asynchronous request to server in baseUrl file using fetch. Fetch returns promise via promise chain to add comments action OR comments failed action.
 	return fetch(baseUrl + 'comments')
 		.then(
 			(response) => {
@@ -22,19 +21,38 @@ export const fetchComments = () => (dispatch) => {
 			}
 		)
 		.then((response) => response.json())
-		.then((comments) => dispatch(addComments(comments))) //promise chain. Fetch returns promise via promise chain to add comments action OR comments failed action.
+		.then((comments) => dispatch(addComments(comments)))
 		.catch((error) => dispatch(commentsFailed(error.message)));
 };
 
 export const commentsFailed = (errMess) => ({
 	type: ActionTypes.COMMENTS_FAILED,
 	payload: errMess,
-}); //There are normal, non thunk action creator functions.
+});
 
 export const addComments = (comments) => ({
 	type: ActionTypes.ADD_COMMENTS,
 	payload: comments,
 });
+
+export const addComment = (comment) => ({
+	type: ActionTypes.ADD_COMMENT,
+	payload: comment,
+});
+
+export const postComment = (campsiteId, rating, author, text) => (dispatch) => {
+	console.log('This is inside postComment');
+	const newComment = {
+		campsiteId: campsiteId,
+		rating: rating,
+		author: author,
+		text: text,
+	};
+	newComment.date = new Date().toISOString();
+	setTimeout(() => {
+		dispatch(addComment(newComment));
+	}, 2000);
+};
 
 export const fetchCampsites = () => (dispatch) => {
 	dispatch(campsitesLoading());
@@ -156,16 +174,13 @@ export const addPartners = (partners) => ({
 	payload: partners,
 });
 
-export const postFavorite = campsiteId => dispatch => {
-	//postFavorite action creator to take advantage of redux thunk middleware. Pass campsiteId fav to post to server. Wrap function body in second arrow function, pass in dispatch function as redux thunk.
+export const postFavorite = (campsiteId) => (dispatch) => {
 	setTimeout(() => {
-		//inside this function wont worry about actually fetching from server. This sumulated server response using JS set timeout function for short delay.
-		dispatch(addFavorite(campsiteId)); //once delay is done, dispatch add favorite action with this add fav action creator with campsiteId
-	}, 2000); //delay duration 2000 milliseconds
+		dispatch(addFavorite(campsiteId));
+	}, 2000);
 };
 
-export const addFavorite = campsiteId => ({
-	//add favorite action creator, standard (non-thunked)action creator that returns a action object
-	type: ActionTypes.ADD_FAVORITE, //with action type and action payload
-	payload: campsiteId, //containing id
+export const addFavorite = (campsiteId) => ({
+	type: ActionTypes.ADD_FAVORITE,
+	payload: campsiteId,
 });
