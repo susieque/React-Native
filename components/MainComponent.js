@@ -4,6 +4,7 @@ import Directory from './DirectoryComponent';
 import CampsiteInfo from './CampsiteInfoComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoritesComponent';
 import About from './AboutComponent';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -142,6 +143,28 @@ const ReservationNavigator = createStackNavigator(
 	}
 );
 
+const FavoritesNavigator = createStackNavigator(
+	{
+		Favorites: { screen: Favorites }
+	},
+	{
+		defaultNavigationOptions: ({navigation}) => ({    //wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
+			headerStyle: {
+				backgroundColor: '#5637DD',
+			},
+			headerTintColor: '#fff',
+			headerTitleStyle: {
+				color: '#fff',
+			},
+			headerLeft: <Icon
+				name='heart'
+				type='font-awesome'
+				iconStyle={styles.stackIcon}
+				onPress={() => navigation.toggleDrawer()}
+			/>			
+		})
+	}
+);
 
 const CustomDrawerContentComponent = props => (  //SafeAreaView specifically for iphone X. Defines part of area as safe area where nothing else will be laid out. to account for physical layout of iphone X rounded corners and camera notch. Default includes this but we're overwriting it w/custom component, we have to add it. 
 	<ScrollView>
@@ -207,7 +230,21 @@ const MainNavigator = createDrawerNavigator(
 					/>
 				)
 			}
-		},		
+		},	
+		Favorites: { 
+			screen: FavoritesNavigator, 
+			navigationOptions: {
+				drawerLabel: 'My Favorites',
+				drawerIcon: ({tintColor}) => (
+					<Icon
+						name='heart'
+						type='font-awesome'
+						size={24}
+						color={tintColor}
+					/>
+				)
+			}
+		},	
 		About: {
 			screen: AboutNavigator, 
 			navigationOptions: {
