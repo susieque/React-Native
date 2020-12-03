@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, Animated } from 'react-native';
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -27,24 +27,47 @@ function RenderItem(props) {
 		);
 	}
 	if (item) {
-		//if item's value is valid return a card.
+
 		return (
 			<Card featuredTitle={item.name} image={{ uri: baseUrl + item.image }}>
 				<Text style={{ margin: 10 }}>{item.description}</Text>
 			</Card>
 		);
-	} // outside of if block return empty view in case we didn't enter the if block.
+	} 
 	return <View />;
 }
 
 class Home extends Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			scaleValue: new Animated.Value(0)   //the property doesn't need to be scaleValue it can be named anything.
+		};
+	}
+
+	animate() {                                     //custom method - animate because it's desciptive of what it will be doing.
+		Animated.timing(
+			this.state.scaleValue,                    //1st argument name of animated value that we want to change over time.
+			{                                        //2nd argument is object that contains 3 properties. toValue(to change to from inital value)from 0 to 1. 1 is 100% in scale. duration 1500 how long to animate 0 to 1. 1500 milliseconds.
+				toValue: 1,
+				duration: 1500,
+				useNativeDriver: true
+			}
+		).start();                                   //chain a method start to run this animation
+	}
+
+	componentDidMount() {  //to start animation and run once, from react lifecycle method componentDidMount. When home component mounts it start animation automatically
+		this.animate();
+	}
+
 	static navigationOptions = {
-		title: 'Home',
-	};
+		title: 'Home'
+	}
 
 	render() {
 		return (
-			<ScrollView>
+			<Animated.ScrollView style={{transform: [{scale: this.state.scaleValue}]}}>
 				<RenderItem
 					item={
 						this.props.campsites.campsites.filter(
@@ -72,7 +95,7 @@ class Home extends Component {
 					isLoading={this.props.partners.isLoading}
 					errMess={this.props.partners.errMess}
 				/>
-			</ScrollView>
+			</Animated.ScrollView>
 		);
 	}
 }

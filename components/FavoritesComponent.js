@@ -7,6 +7,7 @@ import { baseUrl } from '../shared/baseUrl';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { deleteFavorite } from '../redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = (state) => {
 	return {
@@ -20,9 +21,10 @@ const mapDispatchToProps = {
 };
 
 class Favorites extends Component {
+	
 	static navigationOptions = {
-		title: 'My Favorites',
-	};
+		title: 'My Favorites'
+	}
 
 	render() {
 		const { navigate } = this.props.navigation;
@@ -46,7 +48,7 @@ class Favorites extends Component {
 										},
 										{
 											text: 'OK',
-											onPress: () => this.props.deleteFavorite(item.id)
+											onPress: () => this.props.deleteFavorite(item.id),
 										},
 									],
 									{ cancelable: false }
@@ -80,13 +82,15 @@ class Favorites extends Component {
 			);
 		}
 		return (
-			<FlatList
-				data={this.props.campsites.campsites.filter((campsite) =>
-					this.props.favorites.includes(campsite.id)
-				)}
-				renderItem={renderFavoriteItem}
-				keyExtractor={(item) => item.id.toString()}
-			/>
+			<Animatable.View animation='fadeInRightBig' duration={2000}>
+				<FlatList
+					data={this.props.campsites.campsites.filter((campsite) =>
+						this.props.favorites.includes(campsite.id)
+					)}
+					renderItem={renderFavoriteItem}
+					keyExtractor={(item) => item.id.toString()}
+				/>
+			</Animatable.View>
 		);
 	}
 }
