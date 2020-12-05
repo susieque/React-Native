@@ -35,6 +35,8 @@ function RenderCampsite(props) {
 	//ref similar to how in web development you might give html element an id attribute so you can refer to it in js code like using getelementbyid.
 	const view = React.createRef();
 
+	const recognizeComment = ({ dx }) => (dx > 200 ? true : false);
+
 	const recognizeDrag = ({ dx }) => (dx < -200 ? true : false); //a function recognizeDrag as an arrow function. Parameter object and destructed from it property named dx. (differential or distance of a gesture across the x-axis.
 	//return true if value is less than negative 200 and false if it's not. Recognise gesture where theres a horizontal drag to left thats smaller than negative 200 pixels (so -300 would be smaller and -100 is bigger)
 
@@ -70,6 +72,9 @@ function RenderCampsite(props) {
 					],
 					{ cancelable: false }
 				);
+			}
+			else if (recognizeComment(gestureState)) {
+				props.onShowModal();
 			}
 			return true;
 		},
