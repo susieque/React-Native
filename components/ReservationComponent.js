@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { Text,
+import {
+	Text,
 	View,
 	ScrollView,
 	StyleSheet,
 	Picker,
 	Switch,
-    Button,
-    Alert
+	Button,
+	Alert,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { createAnimatableComponent } from 'react-native-animatable';
 import * as Animatable from 'react-native-animatable';
+
 
 class Reservation extends Component {
 	//creating form as a React controlled form. Form data is stored in and controlled by component itself rather than redux.
@@ -107,7 +109,9 @@ class Reservation extends Component {
 							onPress={() => {
 								Alert.alert(
 									'Begin Search?',
-									`Number of Campers: ${this.state.campers}\n\nHike-In? ${this.state.hikeIn}\n\nDate: ${this.state.date.toLocaleDateString('en-US')}`,
+									`Number of Campers: ${this.state.campers}\n\nHike-In? ${
+										this.state.hikeIn
+									}\n\nDate: ${this.state.date.toLocaleDateString('en-US')}`,
 
 									[
 										{
@@ -115,7 +119,7 @@ class Reservation extends Component {
 											onPress: () => this.resetForm(),
 											style: 'cancel',
 										},
-										{ text: 'OK', onPress: () => this.resetForm()}
+										{ text: 'OK', onPress: () => this.resetForm() },
 									],
 									{ cancelable: false }
 								);
