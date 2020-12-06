@@ -5,37 +5,53 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoritesComponent';
+import Login from './LoginComponent';
 import About from './AboutComponent';
-import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
+import {
+	View,
+	Platform,
+	StyleSheet,
+	Text,
+	ScrollView,
+	Image,
+} from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
 import { connect } from 'react-redux';
-import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
-
-const mapDispatchToProps = {  //These action creators have been thunked in order to send asynchronous calls using fetch to the server to bring back data from server. 
-	fetchCampsites,                //using this mapDispatchToProps object allows us to access these action creators as props, just as map state to props object allowed us to access state data as props.
-	fetchComments,                 //to call these action creators do that in the main component below.
+import {
+	fetchCampsites,
+	fetchComments,
 	fetchPromotions,
-	fetchPartners
+	fetchPartners,
+} from '../redux/ActionCreators';
+
+const mapDispatchToProps = {
+	//These action creators have been thunked in order to send asynchronous calls using fetch to the server to bring back data from server.
+	fetchCampsites, //using this mapDispatchToProps object allows us to access these action creators as props, just as map state to props object allowed us to access state data as props.
+	fetchComments, //to call these action creators do that in the main component below.
+	fetchPromotions,
+	fetchPartners,
 };
 
 const DirectoryNavigator = createStackNavigator(
 	{
-		Directory: { 
+		Directory: {
 			screen: Directory,
-			navigationOptions: ({navigation}) => ({
-				headerLeft: <Icon
-				name='list'
-				type='font-awesome'
-				iconStyle={styles.stackIcon}
-				onPress={() => navigation.toggleDrawer()}
-				/>
-			})
+			navigationOptions: ({ navigation }) => ({
+				headerLeft: (
+					<Icon
+						name='list'
+						type='font-awesome'
+						iconStyle={styles.stackIcon}
+						onPress={() => navigation.toggleDrawer()}
+					/>
+				),
+			}),
 		},
-		CampsiteInfo: { screen: CampsiteInfo }
+		CampsiteInfo: { screen: CampsiteInfo },
 	},
 	{
 		initialRouteName: 'Directory',
@@ -56,7 +72,8 @@ const HomeNavigator = createStackNavigator(
 		Home: { screen: Home },
 	},
 	{
-		defaultNavigationOptions: ({navigation}) => ({    //wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
+		defaultNavigationOptions: ({ navigation }) => ({
+			//wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
 			headerStyle: {
 				backgroundColor: '#5637DD',
 			},
@@ -64,13 +81,15 @@ const HomeNavigator = createStackNavigator(
 			headerTitleStyle: {
 				color: '#fff',
 			},
-			headerLeft: <Icon
-				name='home'
-				type='font-awesome'
-				iconStyle={styles.stackIcon}
-				onPress={() => navigation.toggleDrawer()}
-			/>			
-		})
+			headerLeft: (
+				<Icon
+					name='home'
+					type='font-awesome'
+					iconStyle={styles.stackIcon}
+					onPress={() => navigation.toggleDrawer()}
+				/>
+			),
+		}),
 	}
 );
 
@@ -79,7 +98,8 @@ const AboutNavigator = createStackNavigator(
 		About: { screen: About },
 	},
 	{
-		defaultNavigationOptions: ({navigation}) => ({    //wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
+		defaultNavigationOptions: ({ navigation }) => ({
+			//wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
 			headerStyle: {
 				backgroundColor: '#5637DD',
 			},
@@ -87,22 +107,25 @@ const AboutNavigator = createStackNavigator(
 			headerTitleStyle: {
 				color: '#fff',
 			},
-			headerLeft: <Icon
-				name='info-circle'
-				type='font-awesome'
-				iconStyle={styles.stackIcon}
-				onPress={() => navigation.toggleDrawer()}
-			/>			
-		})
-	}	
+			headerLeft: (
+				<Icon
+					name='info-circle'
+					type='font-awesome'
+					iconStyle={styles.stackIcon}
+					onPress={() => navigation.toggleDrawer()}
+				/>
+			),
+		}),
+	}
 );
 
 const ContactNavigator = createStackNavigator(
 	{
-		Contact: { screen: Contact }
+		Contact: { screen: Contact },
 	},
 	{
-		defaultNavigationOptions: ({navigation}) => ({    //wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
+		defaultNavigationOptions: ({ navigation }) => ({
+			//wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
 			headerStyle: {
 				backgroundColor: '#5637DD',
 			},
@@ -110,22 +133,25 @@ const ContactNavigator = createStackNavigator(
 			headerTitleStyle: {
 				color: '#fff',
 			},
-			headerLeft: <Icon
-				name='address-card'
-				type='font-awesome'
-				iconStyle={styles.stackIcon}
-				onPress={() => navigation.toggleDrawer()}
-			/>			
-		})
+			headerLeft: (
+				<Icon
+					name='address-card'
+					type='font-awesome'
+					iconStyle={styles.stackIcon}
+					onPress={() => navigation.toggleDrawer()}
+				/>
+			),
+		}),
 	}
 );
 
 const ReservationNavigator = createStackNavigator(
 	{
-		Reservation: { screen: Reservation }
+		Reservation: { screen: Reservation },
 	},
 	{
-		defaultNavigationOptions: ({navigation}) => ({    //wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
+		defaultNavigationOptions: ({ navigation }) => ({
+			//wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
 			headerStyle: {
 				backgroundColor: '#5637DD',
 			},
@@ -133,13 +159,15 @@ const ReservationNavigator = createStackNavigator(
 			headerTitleStyle: {
 				color: '#fff',
 			},
-			headerLeft: <Icon
-				name='tree'
-				type='font-awesome'
-				iconStyle={styles.stackIcon}
-				onPress={() => navigation.toggleDrawer()}
-			/>			
-		})
+			headerLeft: (
+				<Icon
+					name='tree'
+					type='font-awesome'
+					iconStyle={styles.stackIcon}
+					onPress={() => navigation.toggleDrawer()}
+				/>
+			),
+		}),
 	}
 );
 
@@ -148,68 +176,77 @@ const FavoritesNavigator = createStackNavigator(
 		Favorites: { screen: Favorites }
 	},
 	{
-		defaultNavigationOptions: ({navigation}) => ({    //wrap the object in parentheses so arrow function doesn't get confused. Might think that's beginning curly brace for function body. Its beginning curly brace for object literal so it needs parenthesis. Dont for at bottom too.
+		defaultNavigationOptions: ({ navigation }) => ({
 			headerStyle: {
-				backgroundColor: '#5637DD',
+				backgroundColor: '#5637DD'
 			},
 			headerTintColor: '#fff',
 			headerTitleStyle: {
-				color: '#fff',
+				color: '#fff'
 			},
 			headerLeft: <Icon
-				name='heart'
-				type='font-awesome'
-				iconStyle={styles.stackIcon}
-				onPress={() => navigation.toggleDrawer()}
-			/>			
+					name='heart'
+					type='font-awesome'
+					iconStyle={styles.stackIcon}
+					onPress={() => navigation.toggleDrawer()}
+			/>
+		})
+	}
+);
+const LoginNavigator = createStackNavigator(
+	{
+		Login: { screen: Login }
+	},
+	{
+		defaultNavigationOptions: ({ navigation }) => ({
+			headerStyle: {
+				backgroundColor: '#5637DD'
+			},
+			headerTintColor: '#fff',
+			headerTitleStyle: {
+				color: '#fff'
+			},
+			headerLeft: <Icon
+					name='sign-in'
+					type='font-awesome'
+					iconStyle={styles.stackIcon}
+					onPress={() => navigation.toggleDrawer()}
+			/>
 		})
 	}
 );
 
-const CustomDrawerContentComponent = props => (  //SafeAreaView specifically for iphone X. Defines part of area as safe area where nothing else will be laid out. to account for physical layout of iphone X rounded corners and camera notch. Default includes this but we're overwriting it w/custom component, we have to add it. 
+
+const CustomDrawerContentComponent = (props) => (
 	<ScrollView>
 		<SafeAreaView
 			style={styles.container}
-			forceInset={{top: 'always', horizonal: 'never'}}
-		>  
-			<View style={styles.drawerHeader}> 
-				<View style={{flex: 1}}>  
+			forceInset={{ top: 'always', horizonal: 'never' }}
+		>
+			<View style={styles.drawerHeader}>
+				<View style={{ flex: 1 }}>
 					<Image
 						source={require('./images/logo.png')}
 						style={styles.drawerImage}
-					/>						
+					/>
 				</View>
-				<View style={{flex: 2}}>
+				<View style={{ flex: 2 }}>
 					<Text style={styles.drawerHeaderText}>NuCamp</Text>
 				</View>
-			</View>  
-			<DrawerItems { ...props} />
+			</View>
+			<DrawerItems {...props} />
 		</SafeAreaView>
 	</ScrollView>
-
 );
 
 const MainNavigator = createDrawerNavigator(
 	{
-		Home: { 
-			screen: HomeNavigator,
+		Login: {
+			screen: LoginNavigator,
 			navigationOptions: {
-				drawerIcon: ({tintColor}) => (
+				drawerIcon: ({ tintColor }) => (
 					<Icon
-						name='home'
-						type='font-awesome'
-						size={24}
-						color={tintColor}
-					/>
-				)
-			}
-		}, 
-		Directory: { 
-			screen: DirectoryNavigator, 
-			navigationOptions: {
-				drawerIcon: ({tintColor}) => (
-					<Icon
-						name='list'
+						name='sign-in'
 						type='font-awesome'
 						size={24}
 						color={tintColor}
@@ -217,39 +254,49 @@ const MainNavigator = createDrawerNavigator(
 				)
 			}
 		},
-		Reservation: { 
-			screen: ReservationNavigator, 
+		Home: {
+			screen: HomeNavigator,
+			navigationOptions: {
+				drawerIcon: ({ tintColor }) => (
+					<Icon name='home"'
+						type='font-awesome' 
+						size={24} 
+						color={tintColor} 
+					/>
+				)
+			}
+		},
+		Directory: {
+			screen: DirectoryNavigator,
+			navigationOptions: {
+				drawerIcon: ({ tintColor }) => (
+					<Icon name='list' type='font-awesome' size={24} color={tintColor} />
+				)
+			}
+		},
+		Reservation: {
+			screen: ReservationNavigator,
 			navigationOptions: {
 				drawerLabel: 'Reserve Campsite',
-				drawerIcon: ({tintColor}) => (
-					<Icon
-						name='tree'
-						type='font-awesome'
-						size={24}
-						color={tintColor}
-					/>
+				drawerIcon: ({ tintColor }) => (
+					<Icon name='tree' type='font-awesome' size={24} color={tintColor} />
 				)
 			}
-		},	
-		Favorites: { 
-			screen: FavoritesNavigator, 
+		},
+		Favorites: {
+			screen: FavoritesNavigator,
 			navigationOptions: {
 				drawerLabel: 'My Favorites',
-				drawerIcon: ({tintColor}) => (
-					<Icon
-						name='heart'
-						type='font-awesome'
-						size={24}
-						color={tintColor}
-					/>
+				drawerIcon: ({ tintColor }) => (
+					<Icon name='heart' type='font-awesome' size={24} color={tintColor} />
 				)
 			}
-		},	
+		},
 		About: {
-			screen: AboutNavigator, 
+			screen: AboutNavigator,
 			navigationOptions: {
 				drawerLabel: 'About Us',
-				drawerIcon: ({tintColor}) => (
+				drawerIcon: ({ tintColor }) => (
 					<Icon
 						name='info-circle'
 						type='font-awesome'
@@ -263,7 +310,7 @@ const MainNavigator = createDrawerNavigator(
 			screen: ContactNavigator,
 			navigationOptions: {
 				drawerLabel: 'Contact Us',
-				drawerIcon: ({tintColor}) => (
+				drawerIcon: ({ tintColor }) => (
 					<Icon
 						name='address-card'
 						type='font-awesome'
@@ -272,14 +319,17 @@ const MainNavigator = createDrawerNavigator(
 					/>
 				)
 			}
-		}	
+		}
 	},
 	{
-		drawerBackgroundColor: '#CEC8FF',         //optional second argument for additional configuration, set drawer bg color.
+		initialRouteName: 'Home',
+		drawerBackgroundColor: '#CEC8FF', 
 		contentComponent: CustomDrawerContentComponent
 	}
 );
-          
+
+const AppNavigator = createAppContainer(MainNavigator)
+
 class Main extends Component {
 
 	componentDidMount() {
@@ -290,21 +340,23 @@ class Main extends Component {
 	}
 
 	render() {
-
 		const AppNavigator = createAppContainer(MainNavigator);
 		return (
-			<View style={{
+			<View
+				style={{
 					flex: 1,
-					paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight
-				}}>
+					paddingTop:
+						Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight,
+				}}
+			>
 				<AppNavigator />
 			</View>
 		);
 	}
 }
-const styles= StyleSheet.create ({
+const styles = StyleSheet.create({
 	container: {
-		flex: 1
+		flex: 1,
 	},
 	drawerHeader: {
 		backgroundColor: '#5637DD',
@@ -312,23 +364,23 @@ const styles= StyleSheet.create ({
 		alignItems: 'center',
 		justifyContent: 'center',
 		flex: 1,
-		flexDirection: 'row'
+		flexDirection: 'row',
 	},
 	drawerHeaderText: {
 		color: '#fff',
 		fontSize: 24,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
 	},
 	drawerImage: {
 		margin: 10,
 		height: 60,
-		width:60
+		width: 60,
 	},
 	stackIcon: {
 		marginLeft: 10,
 		color: '#fff',
-		fontSize: 24
-	}
+		fontSize: 24,
+	},
 });
 
-export default connect(null, mapDispatchToProps)(Main);  //How to get access to action creators as props inside main component
+export default connect(null, mapDispatchToProps)(Main); //How to get access to action creators as props inside main component
