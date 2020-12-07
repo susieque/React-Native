@@ -12,7 +12,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { createAnimatableComponent } from 'react-native-animatable';
 import * as Animatable from 'react-native-animatable';
-
+import * as Notifications from 'expo-notifications'f;
 
 class Reservation extends Component {
 	//creating form as a React controlled form. Form data is stored in and controlled by component itself rather than redux.
@@ -24,7 +24,6 @@ class Reservation extends Component {
 			hikeIn: false,
 			date: new Date(),
 			showCalendar: false,
-			// showModal: false   //set to false modal will be hidden, set to true will be shown
 		};
 	}
 
@@ -32,14 +31,9 @@ class Reservation extends Component {
 		title: 'Reserve Campsite',
 	};
 
-	// toggleModal () {
-	//     this.setState({showModal: !this.state.showModal});
+	// handleReservation() {
+	// 	console.log(JSON.stringify(this.state)); //just echo back component state to ourselves in a console log.
 	// }
-
-	handleReservation() {
-		console.log(JSON.stringify(this.state)); //just echo back component state to ourselves in a console log.
-		// this.toggleModal();
-	}
 
 	resetForm() {
 		this.setState({
@@ -50,6 +44,31 @@ class Reservation extends Component {
 			// showModal: false
 		});
 	}
+
+	async presentLocalNotification(date) {
+        function sendNotification() {
+            Notifications.setNotificationHandler({
+                handleNotification: async () => ({
+                    shouldShowAlert: true
+                })
+			});
+			
+			Notifications.scheduleNotificationAsync({
+                content: {
+                    title: 'Your Campsite Reservation Search',
+                    body: `Search for ${date} requested`
+                },
+                trigger: null
+            });
+		}
+		let permissions = await Notifications.getPermissionsAsync();
+        if (!permissions.granted) {
+            permissions = await Notifications.requestPermissionsAsync();
+        }
+        if (permissions.granted) {
+            sendNotification();
+        }
+    }
 
 	render() {
 		return (
@@ -119,10 +138,12 @@ class Reservation extends Component {
 											onPress: () => this.resetForm(),
 											style: 'cancel',
 										},
-										{ text: 'OK', onPress: () => this.resetForm() },
+										{ text: 'OK', 
+										onPress: () => this.resetForm() 
+									},
 									],
 									{ cancelable: false }
-								);
+								)
 							}}
 							title="Search"
 							color="#5637DD"
@@ -130,14 +151,14 @@ class Reservation extends Component {
 						/>
 					</View>
 				</Animatable.View>
-				<Button
+				{/* <Button
 					onPress={() => {
 						this.toggleModal();
 						this.resetForm();
 					}}
 					color="#5637DD"
 					title="Close"
-				/>
+				/> */}
 			</ScrollView>
 		);
 	}
