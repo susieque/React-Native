@@ -14,15 +14,15 @@ const mapStateToProps = (state) => {
 
 class Directory extends Component {
 	static navigationOptions = {
-		title: 'Directory'
-	}
+		title: 'Directory',
+	};
 
 	render() {
 		const { navigate } = this.props.navigation;
 		const renderDirectoryItem = ({ item }) => {
 			return (
-				<Animatable.View animation='fadeInRightBig' duration={2000}>
-					<Title
+				<Animatable.View animation="fadeInRightBig" duration={2000}>
+					<Tile
 						title={item.name}
 						caption={item.description}
 						featured

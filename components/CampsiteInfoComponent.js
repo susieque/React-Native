@@ -9,7 +9,7 @@ import {
 	StyleSheet,
 	Alert,
 	PanResponder,
-} from 'react-native';
+	Share } from 'react-native';
 import { Card, Icon, Input, Rating } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -35,21 +35,17 @@ function RenderCampsite(props) {
 	//ref similar to how in web development you might give html element an id attribute so you can refer to it in js code like using getelementbyid.
 	const view = React.createRef();
 
-	const recognizeComment = ({ dx }) => (dx > 200 ? true : false);
-
-	const recognizeDrag = ({ dx }) => (dx < -200 ? true : false); //a function recognizeDrag as an arrow function. Parameter object and destructed from it property named dx. (differential or distance of a gesture across the x-axis.
+	const recognizeDrag = ({dx}) => (dx < -200) ? true : false;
+	const recognizeComment = ({dx}) => (dx > 200) ? true : false; //a function recognizeDrag as an arrow function. Parameter object and destructed from it property named dx. (differential or distance of a gesture across the x-axis.
 	//return true if value is less than negative 200 and false if it's not. Recognise gesture where theres a horizontal drag to left thats smaller than negative 200 pixels (so -300 would be smaller and -100 is bigger)
 
 	const panResponder = PanResponder.create({
 		onStartShouldSetPanResponder: () => true,
 		onPanResponderGrant: () => {
-			//handler that is triggered when gesture is first recognized.
 			view.current
-				.rubberBand(1000) //will return promise object at end of duration that contains property of finished. Will be true or false(unable to finish).
-				.then((endState) =>
-					console.log(endState.finished ? 'finished' : 'canceled')
-				); //this is not required. Just console logging
-		}, //animatable function as a method on this. All animatable animations like bounce, fadeIn fadeOut etc can be props or methods on animatable component. You can use this to start another animation or dispatch a redux action or call another event handler.
+				.rubberBand(1000) 
+				.then((endState) => console.log(endState.finished ? 'finished' : 'canceled'));
+		}, 
 		onPanResponderEnd: (e, gestureState) => {
 			console.log('pan responder end', gestureState);
 			if (recognizeDrag(gestureState)) {
@@ -60,7 +56,7 @@ function RenderCampsite(props) {
 						{
 							text: 'Cancel',
 							style: 'cancel',
-							onPress: () => console.log('Cancel Pressed'),
+							onPress: () => console.log('Cancel Pressed')
 						},
 						{
 							text: 'OK',
@@ -68,18 +64,27 @@ function RenderCampsite(props) {
 								props.favorite
 									? console.log('Already set as a favorite')
 									: props.markFavorite(),
-						},
+						}
 					],
 					{ cancelable: false }
 				);
-			}
-			else if (recognizeComment(gestureState)) {
+			} else if (recognizeComment(gestureState)) {
 				props.onShowModal();
 			}
 			return true;
 		},
 	});
 	//using the panResponder api above
+
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            title,
+            message: `${title}: ${message} ${url}`,
+            url
+        },{
+            dialogTitle: 'Share ' + title
+        });
+    };
 
 	if (campsite) {
 		return (
@@ -115,6 +120,15 @@ function RenderCampsite(props) {
 							raised
 							reverse
 							onPress={() => props.onShowModal()}
+						/>
+						<Icon
+						    name={'share'}
+                            type='font-awesome'
+                            color='#5637DD'
+                            raised
+                            reverse
+							onPress={() => shareCampsite(campsite.name, campsite.description, 
+								baseUrl + campsite.image)}
 						/>
 					</View>
 				</Card>
