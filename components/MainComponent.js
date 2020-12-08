@@ -14,6 +14,8 @@ import {
 	Text,
 	ScrollView,
 	Image,
+	Alert,
+	ToastAndroid,
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
@@ -27,6 +29,7 @@ import {
 	fetchPromotions,
 	fetchPartners,
 } from '../redux/ActionCreators';
+import NetInfo from '@react-native-community/netinfo';
 
 const mapDispatchToProps = {
 	//These action creators have been thunked in order to send asynchronous calls using fetch to the server to bring back data from server.
@@ -43,8 +46,8 @@ const DirectoryNavigator = createStackNavigator(
 			navigationOptions: ({ navigation }) => ({
 				headerLeft: (
 					<Icon
-						name='list'
-						type='font-awesome'
+						name="list"
+						type="font-awesome"
 						iconStyle={styles.stackIcon}
 						onPress={() => navigation.toggleDrawer()}
 					/>
@@ -83,8 +86,8 @@ const HomeNavigator = createStackNavigator(
 			},
 			headerLeft: (
 				<Icon
-					name='home'
-					type='font-awesome'
+					name="home"
+					type="font-awesome"
 					iconStyle={styles.stackIcon}
 					onPress={() => navigation.toggleDrawer()}
 				/>
@@ -109,8 +112,8 @@ const AboutNavigator = createStackNavigator(
 			},
 			headerLeft: (
 				<Icon
-					name='info-circle'
-					type='font-awesome'
+					name="info-circle"
+					type="font-awesome"
 					iconStyle={styles.stackIcon}
 					onPress={() => navigation.toggleDrawer()}
 				/>
@@ -135,8 +138,8 @@ const ContactNavigator = createStackNavigator(
 			},
 			headerLeft: (
 				<Icon
-					name='address-card'
-					type='font-awesome'
+					name="address-card"
+					type="font-awesome"
 					iconStyle={styles.stackIcon}
 					onPress={() => navigation.toggleDrawer()}
 				/>
@@ -161,8 +164,8 @@ const ReservationNavigator = createStackNavigator(
 			},
 			headerLeft: (
 				<Icon
-					name='tree'
-					type='font-awesome'
+					name="tree"
+					type="font-awesome"
 					iconStyle={styles.stackIcon}
 					onPress={() => navigation.toggleDrawer()}
 				/>
@@ -173,49 +176,52 @@ const ReservationNavigator = createStackNavigator(
 
 const FavoritesNavigator = createStackNavigator(
 	{
-		Favorites: { screen: Favorites }
+		Favorites: { screen: Favorites },
 	},
 	{
 		defaultNavigationOptions: ({ navigation }) => ({
 			headerStyle: {
-				backgroundColor: '#5637DD'
+				backgroundColor: '#5637DD',
 			},
 			headerTintColor: '#fff',
 			headerTitleStyle: {
-				color: '#fff'
+				color: '#fff',
 			},
-			headerLeft: <Icon
-					name='heart'
-					type='font-awesome'
+			headerLeft: (
+				<Icon
+					name="heart"
+					type="font-awesome"
 					iconStyle={styles.stackIcon}
 					onPress={() => navigation.toggleDrawer()}
-			/>
-		})
+				/>
+			),
+		}),
 	}
 );
 const LoginNavigator = createStackNavigator(
 	{
-		Login: { screen: Login }
+		Login: { screen: Login },
 	},
 	{
 		defaultNavigationOptions: ({ navigation }) => ({
 			headerStyle: {
-				backgroundColor: '#5637DD'
+				backgroundColor: '#5637DD',
 			},
 			headerTintColor: '#fff',
 			headerTitleStyle: {
-				color: '#fff'
+				color: '#fff',
 			},
-			headerLeft: <Icon
-					name='sign-in'
-					type='font-awesome'
+			headerLeft: (
+				<Icon
+					name="sign-in"
+					type="font-awesome"
 					iconStyle={styles.stackIcon}
 					onPress={() => navigation.toggleDrawer()}
-			/>
-		})
+				/>
+			),
+		}),
 	}
 );
-
 
 const CustomDrawerContentComponent = (props) => (
 	<ScrollView>
@@ -246,51 +252,47 @@ const MainNavigator = createDrawerNavigator(
 			navigationOptions: {
 				drawerIcon: ({ tintColor }) => (
 					<Icon
-						name='sign-in'
-						type='font-awesome'
+						name="sign-in"
+						type="font-awesome"
 						size={24}
 						color={tintColor}
 					/>
-				)
-			}
+				),
+			},
 		},
 		Home: {
 			screen: HomeNavigator,
 			navigationOptions: {
 				drawerIcon: ({ tintColor }) => (
-					<Icon name='home'
-						type='font-awesome' 
-						size={24} 
-						color={tintColor} 
-					/>
-				)
-			}
+					<Icon name="home" type="font-awesome" size={24} color={tintColor} />
+				),
+			},
 		},
 		Directory: {
 			screen: DirectoryNavigator,
 			navigationOptions: {
 				drawerIcon: ({ tintColor }) => (
-					<Icon name='list' type='font-awesome' size={24} color={tintColor} />
-				)
-			}
+					<Icon name="list" type="font-awesome" size={24} color={tintColor} />
+				),
+			},
 		},
 		Reservation: {
 			screen: ReservationNavigator,
 			navigationOptions: {
 				drawerLabel: 'Reserve Campsite',
 				drawerIcon: ({ tintColor }) => (
-					<Icon name='tree' type='font-awesome' size={24} color={tintColor} />
-				)
-			}
+					<Icon name="tree" type="font-awesome" size={24} color={tintColor} />
+				),
+			},
 		},
 		Favorites: {
 			screen: FavoritesNavigator,
 			navigationOptions: {
 				drawerLabel: 'My Favorites',
 				drawerIcon: ({ tintColor }) => (
-					<Icon name='heart' type='font-awesome' size={24} color={tintColor} />
-				)
-			}
+					<Icon name="heart" type="font-awesome" size={24} color={tintColor} />
+				),
+			},
 		},
 		About: {
 			screen: AboutNavigator,
@@ -298,13 +300,13 @@ const MainNavigator = createDrawerNavigator(
 				drawerLabel: 'About Us',
 				drawerIcon: ({ tintColor }) => (
 					<Icon
-						name='info-circle'
-						type='font-awesome'
+						name="info-circle"
+						type="font-awesome"
 						size={24}
 						color={tintColor}
 					/>
-				)
-			}
+				),
+			},
 		},
 		Contact: {
 			screen: ContactNavigator,
@@ -312,31 +314,68 @@ const MainNavigator = createDrawerNavigator(
 				drawerLabel: 'Contact Us',
 				drawerIcon: ({ tintColor }) => (
 					<Icon
-						name='address-card'
-						type='font-awesome'
+						name="address-card"
+						type="font-awesome"
 						size={24}
 						color={tintColor}
 					/>
-				)
-			}
-		}
+				),
+			},
+		},
 	},
 	{
 		initialRouteName: 'Home',
-		drawerBackgroundColor: '#CEC8FF', 
-		contentComponent: CustomDrawerContentComponent
+		drawerBackgroundColor: '#CEC8FF',
+		contentComponent: CustomDrawerContentComponent,
 	}
 );
 
-const AppNavigator = createAppContainer(MainNavigator)
+const AppNavigator = createAppContainer(MainNavigator);
 
 class Main extends Component {
-
 	componentDidMount() {
 		this.props.fetchCampsites();
 		this.props.fetchComments();
 		this.props.fetchPromotions();
 		this.props.fetchPartners();
+
+		NetInfo.fetch().then((connectionInfo) => {
+			(Platform.OS === 'ios')
+				? Alert.alert('Initial Network Connectivity Type:', connectionInfo.type)
+				: ToastAndroid.show(
+						'Initial Network Connectivity Type: ' + connectionInfo.type,
+						ToastAndroid.LONG
+				  );
+		});
+
+		this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => {
+			this.handleConnectivityChange(connectionInfo);
+		});
+	}
+
+	componentWillUnmount() {
+		this.unsubscribeNetInfo();
+	}
+
+	handleConnectivityChange = connectionInfo => {
+		let connectionMsg = 'You are now connected to an active network.';
+		switch(connectionInfo.type) {
+			case 'none':
+				connectionMsg = 'No network connection is active.';
+				break;
+			case 'unknown':
+				connectionMsg = 'The network connection state is unknown.';	
+				break;
+			case 'cellular':
+				connectionMsg = 'You are now connected to a cellular network.';
+				break;
+			case 'wifi':
+				connectionMsg = 'You are now connected to a WiFi network.';
+				break;
+		}
+		(Platform.OS === 'ios')
+			? Alert.alert('Connection change:', connectionMsg)
+			: ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
 	}
 
 	render() {
